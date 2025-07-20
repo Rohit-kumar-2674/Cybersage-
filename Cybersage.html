@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Trivia Quiz</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .quiz-container {
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 800px;
+            padding: 40px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            color: #4a4a4a;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .question:last-of-type {
+            border-bottom: none;
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 1.1em;
+            margin-bottom: 15px;
+        }
+
+        .options label {
+            display: block;
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+            border: 1px solid #ddd;
+        }
+
+        .options label:hover {
+            background-color: #e9ecef;
+            transform: translateY(-2px);
+        }
+
+        .options input[type="radio"] {
+            display: none;
+        }
+
+        .options input[type="radio"]:checked + span {
+            font-weight: 600;
+            color: #007bff;
+        }
+
+        .submit-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2em;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 30px;
+        }
+
+        .submit-btn:hover {
+            background: linear-gradient(45deg, #0056b3, #007bff);
+            transform: translateY(-3px);
+        }
+
+        .results-container {
+            display: none;
+            text-align: center;
+            padding: 40px;
+            background-color: #f8f9fa;
+            border-radius: 15px;
+            margin-top: 30px;
+        }
+
+        .results-container h2 {
+            color: #4a4a4a;
+            margin-bottom: 20px;
+        }
+
+        .results-details {
+            font-size: 1.2em;
+        }
+
+        .results-details p {
+            margin: 10px 0;
+        }
+
+        .correct {
+            color: #28a745;
+            font-weight: 600;
+        }
+
+        .wrong {
+            color: #dc3545;
+            font-weight: 600;
+        }
+
+        .average {
+            color: #17a2b8;
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="quiz-container">
+        <h1>Computer Fundamentals Quiz</h1>
+        <p>Test your knowledge with these 75 questions. Select the best answer for each question and submit at the end to see your score.</p>
+        <form id="quizForm">
+            <div id="quiz"></div>
+            <button type="submit" class="submit-btn">Submit Quiz</button>
+        </form>
+        <div id="results" class="results-container">
+            <h2>Quiz Results</h2>
+            <div class="results-details">
+                <p>Correct Answers: <span id="correct-answers" class="correct"></span></p>
+                <p>Wrong Answers: <span id="wrong-answers" class="wrong"></span></p>
+                <p>Average Score: <span id="average-score" class="average"></span>%</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { question: "MS Word is an example of a/an", options: ["operating system", "processing device", "application software", "input device"], answer: "application software" },
+            { question: "Which shortcut key is used to spell check in MS-Word?", options: ["f1", "f2", "f7", "f9"], answer: "f7" },
+            { question: "What is extension of powerpoint?", options: [".docx", "document", ".xls", ".ppt"], answer: ".ppt" },
+            { question: "What is input device?", options: ["monitor", "keyboard", "printer", "none of these"], answer: "keyboard" },
+            { question: "How to insert picture in ms-word?", options: ["Go to insert menu-click on picture choose picture", "Go to home menu-click on picture -choose picture", "Go to page layout menu click on picture -choose picture", "Go to insert menu -click on shapes -choose picture"], answer: "Go to insert menu-click on picture choose picture" },
+            { question: "Header & Footer find in which menu?", options: ["insert", "home", "page layout", "view"], answer: "insert" },
+            { question: "Fonts are available in which menu?", options: ["Sentence case", "Proper case", "Upper Case", "Lower Case"], answer: "Sentence case" },
+            { question: "Which case is not provided in Change Case?", options: ["Sentence case", "Proper Case", "Upper Case", "Lower case"], answer: "Proper Case" },
+            { question: "1024 bytes =", options: ["1 kilo byte (KB)", "1 Mega Byte(MB)", "1 Giga Byte (GB)", "1 Terra byte (TB)"], answer: "1 kilo byte (KB)" },
+            { question: "Who is Father of Computer?", options: ["Shwet Tripathi", "Charles Babbage", "Tim Berner Lee", "None of the above"], answer: "Charles Babbage" },
+            { question: "What is extension of MS-Excel?", options: [".docx", "document", ".xls", ".ppt"], answer: ".xls" },
+            { question: "ALU stands for", options: ["Arithmetic logic unit", "Arithmetic large unit", "Arithmetic long unit", "None of these"], answer: "Arithmetic logic unit" },
+            { question: "CTRL + R", options: ["Re-open the last closed document", "Re-print the last printed page", "Re-apply the last paragraph formatting", "Right align the selected Paragraph"], answer: "Right align the selected Paragraph" },
+            { question: "What is the name of first super computer of india?", options: ["Saga 220", "PARAM 8000", "ENIAC", "PARAM6000"], answer: "PARAM 8000" },
+            { question: "Alignment buttons are available on the toolbar of MSWord 2007?", options: ["Formatting toolbar", "Start bar", "Standard Toolbar", "None of these"], answer: "Formatting toolbar" },
+            { question: "The internet uses", options: ["Circuit Switching", "Packet switching", "Hybrid switching", "None of the above"], answer: "Packet switching" },
+            { question: "Indicates copies of the massage were sent to additional people. The recipient does not know the message has been sent to others.", options: ["URL", "End", "Cc", "Bcc"], answer: "Bcc" },
+            { question: "The internet was originally developed by", options: ["A corporation", "Computer hackers", "U.S. Department of Defence U.S.", "The university of Michigan"], answer: "U.S. Department of Defence U.S." },
+            { question: "SMTP is associated with", options: ["TCP/IP", "Electronic Mail", "Internet Explorer", "WWW"], answer: "Electronic Mail" },
+            { question: "The domain name in an URL refers to the", options: ["Protocol", "Server", "Filename", "Directory"], answer: "Server" },
+            { question: "Interest on saving deposit is paid", options: ["Yearly", "Every month", "Half yearly", "Quarterly"], answer: "Quarterly" },
+            { question: "Which of the following is type of credit card?", options: ["Master Card", "Visa", "Both a & b", "None of the above"], answer: "Both a & b" },
+            { question: "Which of the following means that the receiver is ensured that the massage is coming from the intended sender, not an imposter?", options: ["Availability", "Access Control", "Authentication", "All of the above"], answer: "Authentication" },
+            { question: "Software programs that close potential security breaches in an operating system are known as", options: ["Security patches", "Refresh patches", "Security breath fixes", "All of the above"], answer: "Security patches" },
+            { question: "In which year NEFT service has been stared", options: ["2005", "2002", "2001", "2006"], answer: "2005" },
+            { question: "The objective for industry 4.0 is", options: ["Increases efficiency", "Reduced complexity", "Enabled self controlling", "All above"], answer: "All above" },
+            { question: "Trend Micro is a", options: ["Program", "Antivirus software", "Virus program", "All of these"], answer: "Antivirus software" },
+            { question: "design principles are applied for industry 4.0", options: ["Four", "Two", "Six", "None of the above"], answer: "Six" },
+            { question: "Every web document has a unique address, what is it called?", options: ["IP Address", "Domain", "Universal Resolution locator", "Hyperlink"], answer: "Universal Resolution locator" },
+            { question: "The world length of a computer is measured in", options: ["Meters", "Millimeters", "Bits", "Bytes"], answer: "Bits" },
+            { question: "MDA stands for", options: ["Mail Delivery Agent", "Mail Dissemination agent", "Mail Departure Agent", "Mail Dispatch Assurance"], answer: "Mail Delivery Agent" },
+            { question: "IIS refers to", options: ["International information Server", "International information for standards", "Internet information system", "Internal IP scheme"], answer: "International information Server" },
+            { question: "Which of the following is not a text function?", options: ["CHAR()", "VAR()", "VER()", "PMT()"], answer: "PMT()" },
+            { question: "The set of processed data is called?", options: ["Data", "Data processing", "Database", "Information"], answer: "Information" },
+            { question: "A specific page of web is known as", options: ["Webpage", "Document", "None of above", "-"], answer: "Webpage" },
+            { question: "The internet uses", options: ["Circuit switching", "packet switching", "Hybrid switching", "None of the above"], answer: "packet switching" },
+            { question: "News groups are", options: ["Discussion group", "E-mail service", "none", "-"], answer: "Discussion group" },
+            { question: "A blockchain is a growing, list of records, which is work on the bases of", options: ["Robotics", "Virtual reality", "Cryptographic", "None of above"], answer: "Cryptographic" },
+            { question: "KYC means", options: ["Know your customer", "Know your character", "Both of the above", "None of the above"], answer: "Know your customer" },
+            { question: "Which of the following is not windows email programme?", options: ["Eudora", "Outlook", "Pine", "Pegasus"], answer: "Eudora" },
+            { question: "Which of the following is used as operating system of mobile phone and tablets", options: ["Window OS", "Android OS", "iOS", "All of above"], answer: "All of above" },
+            { question: "IBM 1401 is", options: ["1st Generation Computer", "2nd Generation Computer", "3rd Generation Computer", "4th Generation Computer"], answer: "2nd Generation Computer" },
+            { question: "IPV4 address is of how many bits-", options: ["32 bits", "16 bits", "8 bits", "5 bits"], answer: "32 bits" },
+            { question: "DVD is based on", options: ["USB Pen technology", "Magnetic disk Technology", "Media to store Video data only", "Optical Disk technology"], answer: "Optical Disk technology" },
+            { question: "Port number for SMTP protocols", options: ["22", "25", "110", "80"], answer: "25" },
+            { question: "Which of the following is the types of cyber security?", options: ["Malware", "Phishing", "Ransonware", "All of these"], answer: "All of these" },
+            { question: "For your E-mail PGP allows you to", options: ["Enhanced", "Encrypt", "Decrypt", "design"], answer: "Encrypt" },
+            { question: "Skype is one of the best", options: ["web Browser", "Interjet telephony", "web server", "Protocol"], answer: "Interjet telephony" },
+            { question: "WAIS stands for", options: ["World Area internet service", "Wide Area internet service", "Wide Area information service", "None of above"], answer: "Wide Area information service" },
+            { question: "CC in the email stands for-", options: ["Carbon Copy", "Cyber copy", "None of the above", "KB"], answer: "Carbon Copy" },
+            { question: "Which of the following is the largest unit of storage?", options: ["MB", "GB", "TB", "KB"], answer: "TB" },
+            { question: "A tab is used for", options: ["Table data", "Table heading", "Table row", "Table Dimension"], answer: "Table data" },
+            { question: "When the hacker penetrates a network, this is a network issue.", options: ["Reliability", "Security", "None of above", "-"], answer: "Security" },
+            { question: "QR code stand for", options: ["Quick Response code", "Quick Result code", "Quick Restore code", "None of above"], answer: "Quick Response code" },
+            { question: "Ctrl + R", options: ["Re-Open the last closed document", "Re-Print the last printed page", "Re-Apply the last paragraph formatting", "Right align the selected paragraph"], answer: "Right align the selected paragraph" },
+            { question: "ALU stands for", options: ["Arithmetic Logic Unit", "Arithmetic Large Unit", "Arithmetic Long Unit", "None of these"], answer: "Arithmetic Logic Unit" },
+            { question: "Enter Key", options: ["Moves the cursor end of the line", "Moves the cursor end of the line", "Moves the cursor end of the row", "Moves the cursor end of the column"], answer: "Moves the cursor end of the line" },
+            { question: "What is extension of powerpoint?", options: [".docx", ".document", ".xls", ".ppt"], answer: ".ppt" },
+            { question: "How can you see all your slides at once?", options: ["Through slide sorter view", "Through slide view", "Through normal view", "Through slide show"], answer: "Through slide sorter view" },
+            { question: "Shortcut to insert new slide in the current Presentation is?", options: ["CTRL+M", "CTRL+F", "CTRL+N", "-"], answer: "CTRL+M" },
+            { question: "To edit a chart, we can", options: ["Double click the chart object", "Click and drag the chart object", "Triple click the chart object", "Click the chart object"], answer: "Double click the chart object" },
+            { question: "What would I choose to create a pre formatted style?", options: ["Slide sorter view", "Slide layout", "Format", "None of these"], answer: "Slide layout" },
+            { question: "To print Powerpoint presentation press", options: ["CTRL+A", "CTRL+P", "CTRL+S", "-"], answer: "CTRL+P" },
+            { question: "Slide sorter can be accessed from which menu?", options: ["Insert", "File", "Edit", "View"], answer: "View" },
+            { question: "In general the financial year from shall be from", options: ["1st April of any year", "31st March of any year", "1st March of any year", "None of these"], answer: "1st April of any year" },
+            { question: "Which menu appears after starting Tally for the first time", options: ["Gateway of Tally", "Company Info", "Display", "None of these"], answer: "Company Info" },
+            { question: "Which option is used in Tally to make changes in created company", options: ["Select Company", "Shut Company", "Alter", "None of These"], answer: "Alter" },
+            { question: "Which option is selected from Company Info Menu to divide company data into two financial years", options: ["Change Tally Vault", "Alter", "Split company Data", "New Company"], answer: "Split company Data" },
+            { question: "Which option is used to copy company's data into pendrive or CD", options: ["Backup", "Restore", "Split Company Data", "Copy Data"], answer: "Backup" },
+            { question: "Which option is used to place data taken in pen drive or CD to Appropriate place in Tally", options: ["Backup", "Restore", "Split Company Data", "None of these"], answer: "Restore" },
+            { question: "Which option is used to move from one company to another when more than one companies are open", options: ["Company Info", "Shut Company", "Select company", "Company"], answer: "Select company" },
+            { question: "Which menu is used to create new ledgers, groups and voucher types in Tally", options: ["Reports", "Import", "Transactions", "Masters"], answer: "Masters" },
+            { question: "Which submenu is used to create new ledgers, groups and voucher types in Tally", options: ["Account Info", "Inventory Info", "Accounting Vouchers", "Inventory Vouchers"], answer: "Account Info" },
+            { question: "How many groups are pre-defined in Tally", options: ["28", "30", "15", "19"], answer: "28" },
+            { question: "How many primary groups are there in Tally", options: ["15", "12", "5", "20"], answer: "15" }
+        ];
+
+        const quizContainer = document.getElementById('quiz');
+        const quizForm = document.getElementById('quizForm');
+        const resultsContainer = document.getElementById('results');
+
+        function buildQuiz() {
+            const output = [];
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const options = [];
+                for (letter in currentQuestion.options) {
+                    options.push(
+                        `<label>
+                            <input type="radio" name="question${questionNumber}" value="${currentQuestion.options[letter]}">
+                            <span>${currentQuestion.options[letter]}</span>
+                         </label>`
+                    );
+                }
+                output.push(
+                    `<div class="question">
+                       <div class="question-text">${questionNumber + 1}. ${currentQuestion.question}</div>
+                       <div class="options">${options.join('')}</div>
+                     </div>`
+                );
+            });
+            quizContainer.innerHTML = output.join('');
+        }
+
+        function showResults() {
+            const answerContainers = quizContainer.querySelectorAll('.options');
+            let numCorrect = 0;
+            quizData.forEach((currentQuestion, questionNumber) => {
+                const answerContainer = answerContainers[questionNumber];
+                const selector = `input[name=question${questionNumber}]:checked`;
+                const userAnswer = (answerContainer.querySelector(selector) || {}).value;
+
+                if (userAnswer === currentQuestion.answer) {
+                    numCorrect++;
+                }
+            });
+
+            quizForm.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            const correctAnswersSpan = document.getElementById('correct-answers');
+            const wrongAnswersSpan = document.getElementById('wrong-answers');
+            const averageScoreSpan = document.getElementById('average-score');
+
+            const totalQuestions = quizData.length;
+            const numWrong = totalQuestions - numCorrect;
+            const averageScore = (numCorrect / totalQuestions) * 100;
+
+            correctAnswersSpan.textContent = numCorrect;
+            wrongAnswersSpan.textContent = numWrong;
+            averageScoreSpan.textContent = averageScore.toFixed(2);
+        }
+
+        buildQuiz();
+
+        quizForm.addEventListener('submit', event => {
+            event.preventDefault();
+            showResults();
+        });
+    </script>
+
+</body>
+</html>
